@@ -328,6 +328,8 @@ static int fix_client_order(struct fix_session_cfg *cfg, struct fix_client_arg *
 
 	fprintf(stdout, "Client Logon OK\n");
 
+    sleep(10);
+
 	ret = -1;
 
 	fields = calloc(FIX_MAX_FIELD_NUMBER, sizeof(struct fix_field));
@@ -452,14 +454,16 @@ static enum fix_version strversion(const char *dialect)
 		return FIX_4_3;
 	else if (!strcmp(dialect, "fix44"))
 		return FIX_4_4;
+    else if (!strcmp(dialect, "fixt11"))
+		return FIXT_1_1;
 
-	return FIX_4_4;
+	return FIXT_1_1;
 }
 
 int main(int argc, char *argv[])
 {
 	enum fix_client_mode mode = FIX_CLIENT_SCRIPT;
-	enum fix_version version = FIX_4_4;
+	enum fix_version version = FIXT_1_1;
 	const char *target_comp_id = NULL;
 	const char *sender_comp_id = NULL;
 	struct fix_client_arg arg = {0};

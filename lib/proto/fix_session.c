@@ -181,6 +181,13 @@ int fix_session_send(struct fix_session *self, struct fix_message *msg, unsigned
 	self->tx_timestamp = self->now;
 	msg->str_now = self->str_now;
 
+
+    printf("logon : %s\n",msg->fields[3].string_value);
+    
+    printf("Enviamos\n");
+    
+    
+       
 	return fix_message_send(msg, self->sockfd, flags);
 }
 

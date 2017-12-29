@@ -215,6 +215,8 @@ int fix_session_logon(struct fix_session *session)
 		.fields		= fields,
 	};
 
+    printf("logon : %s\n",logon_msg.fields[3].string_value);
+
 	if (!session->password || !strlen(session->password))
 		logon_msg.nr_fields--;
 

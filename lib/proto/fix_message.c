@@ -588,14 +588,19 @@ bool fix_message_type_is(struct fix_message *self, enum fix_msg_type type)
 
 bool fix_field_unparse(struct fix_field *self, struct buffer *buffer)
 {
-	buffer->end += uitoa(self->tag, buffer_end(buffer));
+    printf("ACAA\n");
+	printf("%d\n",self->tag);
+    
+    buffer->end += uitoa(self->tag, buffer_end(buffer));
 
 	buffer_put(buffer, '=');
+
+    printf("%d\n",self->type);
 
 	switch (self->type) {
 	case FIX_TYPE_STRING: {
 		const char *p = self->string_value;
-
+        printf("%s\n",p);
 		while (*p) {
 			buffer_put(buffer, *p++);
 		}
@@ -667,8 +672,12 @@ void fix_message_unparse(struct fix_message *self)
 	fix_field_unparse(&msg_seq_num, self->body_buf);
 	fix_field_unparse(&sending_time, self->body_buf);
 
+    printf("logon : %s\n",self->fields[3].string_value);
+
 	for (i = 0; i < self->nr_fields; i++)
-		fix_field_unparse(&self->fields[i], self->body_buf);
+        printf("* %d\n",i);
+		fix_field_unparse(&self->fields[3], self->body_buf);
+        printf("Salimo\n");
 
 	/* head */
 	begin_string	= FIX_STRING_FIELD(BeginString, self->begin_string);
@@ -694,6 +703,15 @@ int fix_message_send(struct fix_message *self, int sockfd, int flags)
 
 	if (!(flags & FIX_SEND_FLAG_PRESERVE_BUFFER))
 		fix_message_unparse(self);
+
+    
+
+    FILE * fp;
+    fp = fopen ("/home/jmbaruffaldi/msjs.txt", "w+");
+    fprintf(fp," %s %s\n",self->head_buf->data,self->body_buf->data);
+    fclose(fp);
+    
+    printf("Salimos\n");
 
 	buffer_to_iovec(self->head_buf, &self->iov[0]);
 	buffer_to_iovec(self->body_buf, &self->iov[1]);
